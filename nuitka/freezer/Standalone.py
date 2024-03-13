@@ -160,7 +160,10 @@ def copyDllsUsed(dist_dir, standalone_entry_points):
     ]
     main_standalone_entry_point = standalone_entry_points[0]
 
-    if isMacOS():
+    if True:
+        # For WASI
+        pass
+    elif isMacOS():
         fixupBinaryDLLPathsMacOS(
             binary_filename=os.path.join(
                 dist_dir, main_standalone_entry_point.dest_path

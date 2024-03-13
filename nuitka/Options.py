@@ -891,9 +891,9 @@ Error, to compile a package, specify its directory but, not the '__init__.py'.""
         if "PYTHON" not in os.environ:
             Tracing.general.warning(
                 """\
-The Python version '%s' is only experimentally supported by Nuitka '%s', \
+The Python version '%s' is only experimentally supported by py2wasm '%s', \
 but an upcoming release will change that. In the mean time use Python \
-version '%s' instead or newer Nuitka."""
+version '%s' instead or newer py2wasm."""
                 % (
                     python_version_str,
                     getNuitkaVersion(),
@@ -925,7 +925,7 @@ and recommended only for use in Nuitka development and testing."""
         elif not isExperimental("python" + python_version_str):
             Tracing.general.sysexit(
                 """\
-The Python version '%s' is not supported by Nuitka '%s', but an upcoming \
+The Python version '%s' is not supported by py2wasm '%s', but an upcoming \
 release will add it. In the mean time use '%s' instead."""
                 % (
                     python_version_str,

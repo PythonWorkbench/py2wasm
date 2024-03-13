@@ -21,6 +21,22 @@ def getSupportedPythonVersions():
     """Officially supported Python versions for Nuitka."""
 
     return (
+        # "2.6",
+        # "2.7",
+        # "3.4",
+        # "3.5",
+        # "3.6",
+        # "3.7",
+        # "3.8",
+        # "3.9",
+        # "3.10",
+        "3.11",
+    )
+
+
+def getNotYetSupportedPythonVersions():
+    """Versions known to not work at all (yet)."""
+    return (
         "2.6",
         "2.7",
         "3.4",
@@ -272,6 +288,12 @@ def getSystemPrefixPath():
 
     global _the_sys_prefix  # Cached result, pylint: disable=global-statement
     if _the_sys_prefix is None:
+        if True:
+            # WASI-Python
+            wasi_python_dir = os.path.join(os.path.dirname(__file__), "wasi-python")
+            _the_sys_prefix = wasi_python_dir
+            return _the_sys_prefix
+
         sys_prefix = getattr(
             sys, "real_prefix", getattr(sys, "base_prefix", sys.prefix)
         )
@@ -389,7 +411,7 @@ def isPythonValidDigitValue(value):
     return -_float_digit_boundary <= value <= _float_digit_boundary
 
 
-sizeof_clong = ctypes.sizeof(ctypes.c_long)
+sizeof_clong = 4 # ctypes.sizeof(ctypes.c_long)
 
 # TODO: We could be more aggressive here, there are issues with using full
 # values, in some contexts, but that can probably be sorted out.

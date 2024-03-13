@@ -61,6 +61,8 @@ def findNuitkaPackages():
             dirnames.remove("release")
         if "quality" in dirnames:
             dirnames.remove("quality")
+        if "wasi-python" in dirnames:
+            dirnames.remove("wasi-python")
 
         # Handled separately.
         if "inline_copy" in dirnames:
@@ -86,6 +88,8 @@ def addDataFiles(data_files, base_path, do_byte_compile=True):
         "%s/LICENSE*" % base_path,
         "%s/*/LICENSE*" % base_path,
         "%s/READ*" % base_path,
+        # "%s/wasi-python/*" % base_path,
+        # "%s/wasi-python/*/*" % base_path,
     )
 
     data_files.extend(patterns)
@@ -145,7 +149,7 @@ nuitka_packages = findNuitkaPackages()
 
 # Include extra files
 package_data = {
-    "": ["*.txt", "*.rst", "*.c", "*.h", "*.yml"],
+    "": ["*.txt", "*.rst", "*.c", "*.h", "*.yml", "wasi-python/**/*"],
     "nuitka.build": [
         "*.scons",
         "static_src/*.c",
@@ -331,6 +335,7 @@ if os.name == "nt" and not isMSYS2MingwPython():
     console_scripts = []
 else:
     console_scripts = [
+        "py2wasm = nuitka.__main__:py2wasm",
         "nuitka%s = nuitka.__main__:main" % binary_suffix,
         "nuitka%s-run = nuitka.__main__:main" % binary_suffix,
     ]
@@ -372,7 +377,11 @@ with open("README.rst", "rb") as input_file:
         ".. image:: doc/images/Nuitka-Logo-Symbol.png\n", ""
     )
 
-install_requires = []
+install_requires = [
+    # "appdirs",
+    "tqdm",
+    "requests",
+]
 if sys.version_info >= (3, 7):
     install_requires.append("ordered-set >= 4.1.0")
 if sys.version_info[:2] == (2, 7):
@@ -385,11 +394,12 @@ if sys.platform == "darwin" and sys.version_info < (3, 7):
     install_requires.append("orderedset >= 2.0.3")
 
 setup(
-    name="Nuitka",
+    name="py2wasm",
     license="Apache License, Version 2.0",
     version=version,
     long_description=long_description,
     long_description_content_type="text/x-rst",
+    python_requires='>=3.11,<3.12',
     classifiers=[
         # Nuitka is mature even
         "Development Status :: 5 - Production/Stable",
@@ -404,16 +414,16 @@ setup(
         # Nuitka standalone mode aims at distribution
         "Topic :: System :: Software Distribution",
         # Python2 supported versions.
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
+        # "Programming Language :: Python :: 2.6",
+        # "Programming Language :: Python :: 2.7",
         # Python3 supported versions.
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
+        # "Programming Language :: Python :: 3.4",
+        # "Programming Language :: Python :: 3.5",
+        # "Programming Language :: Python :: 3.6",
+        # "Programming Language :: Python :: 3.7",
+        # "Programming Language :: Python :: 3.8",
+        # "Programming Language :: Python :: 3.9",
+        # "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         # We depend on CPython.

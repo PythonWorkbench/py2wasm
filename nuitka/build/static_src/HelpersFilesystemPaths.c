@@ -227,7 +227,7 @@ int64_t getFileSize(FILE_HANDLE file_handle) {
 #if defined(__APPLE__)
 #include <copyfile.h>
 #else
-#if defined(__MSYS__) || defined(__HAIKU__) || defined(__OpenBSD__) || defined(__wasi__)
+#if defined(__MSYS__) || defined(__HAIKU__) || defined(__wasi__)
 static bool sendfile(int output_file, int input_file, off_t *bytesCopied, size_t count) {
     char buffer[32768];
 
@@ -253,7 +253,7 @@ static bool sendfile(int output_file, int input_file, off_t *bytesCopied, size_t
 
     return true;
 }
-#elif !defined(__FreeBSD__)
+#elif !defined(__FreeBSD__) && !defined(__wasi__)
 #include <sys/sendfile.h>
 #endif
 #endif
@@ -681,13 +681,11 @@ char const *getBinaryFilenameHostEncoded(bool resolve_symlinks) {
 
     // Resolve any symlinks we were invoked via
     resolveFileSymbolicLink(binary_filename_target, binary_filename_target, buffer_size, resolve_symlinks);
+
 #elif defined(__wasi__)
     const char *wasi_filename = "program.wasm";
     strncpy(binary_filename_resolved, wasi_filename, MAXPATHLEN);
-#elif defined(__OpenBSD__)
-    _getBinaryPath2(binary_filename_target);
-    resolveFileSymbolicLink(binary_filename_target, binary_filename_target, buffer_size, resolve_symlinks);
-#elif defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || defined(__OpenBSD__)
     /* Not all of FreeBSD has /proc file system, so use the appropriate
      * "sysctl" instead.
      */

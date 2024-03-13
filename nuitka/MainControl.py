@@ -1141,10 +1141,20 @@ not use compiled code while it exists."""
                 % run_filename
             )
 
+    final_output_file = os.environ.get("PY2WASM_OUTPUT")
+    if final_output_file:
+        import shutil
+        shutil.copyfile(
+            final_filename,
+            final_output_file,
+        )
+
+        print(f"py2wasm: File created successfully: {final_output_file}")
+
 
 def main():
     try:
-        _main()
+        return _main()
     except BaseException:
         try:
             writeCompilationReports(aborted=True)

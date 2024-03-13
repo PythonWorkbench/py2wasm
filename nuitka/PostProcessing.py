@@ -310,9 +310,12 @@ def executePostProcessing():
             logger=postprocessing_logger,
         )
 
+    if True:
+        # For WASI
+        pass
     # On macOS, we update the executable path for searching the "libpython"
     # library.
-    if (
+    elif (
         isMacOS()
         and not Options.shallMakeModule()
         and not Options.shallUseStaticLibPython()

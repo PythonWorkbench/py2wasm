@@ -14,7 +14,6 @@ or package, that can contain all used modules too.
 import os
 import sys
 
-
 def main():
     # PyLint for Python3 thinks we import from ourselves if we really
     # import from package, pylint: disable=I0021,no-name-in-module
@@ -149,6 +148,55 @@ def main():
     if Options.isShowMemory():
         MemoryUsage.showMemoryTrace()
 
+def py2wasm():
+    from nuitka.utils.wasi_sdk import try_get_sdk_path
+
+    sdk_path = try_get_sdk_path()
+    # WASI_SDK_DIR = os.environ.get("WASI_SDK_DIR")
+    # if not WASI_SDK_DIR:
+    #     print("Please set the WASI_SDK_DIR to continue")
+    #     return -1
+    clang_path = "%s/bin/clang" % sdk_path
+    if not os.path.isfile(clang_path):
+        print("py2wasm: The SDK clang file doesn't exist: %s" % clang_path)
+        return -1
+    os.environ["CC"] = clang_path
+
+    import argparse
+
+    parser = argparse.ArgumentParser(description='py2wasm is a program to compile Python to WebAssembly', prog="py2wasm")
+    parser.add_argument('filename', help='The python file to compile')
+    parser.add_argument('-o', '--output', help='The output wasm')
+    args = parser.parse_args(sys.argv[1:])
+
+    extra_args = []
+
+    output_dir = os.path.join(os.path.dirname(__file__), "__py2wasm")
+    output_filename = "output.wasm"
+    extra_args = [
+        "--output-dir=%s" % output_dir,
+        "--output-filename=%s" % output_filename,
+        "--remove-output"
+    ]
+
+    binary_name = "nuitka"
+    if "NUITKA_BINARY_NAME" in os.environ:
+        binary_name = os.environ["NUITKA_BINARY_NAME"]
+
+    sys.argv = [
+        binary_name,
+        args.filename,
+        "--standalone",
+        "--static-libpython=yes",
+        "--disable-ccache",
+        # "--onefile",
+        "--lto=yes",
+    ] + extra_args
+
+    final_output_file = args.output or args.filename.replace(".py", ".wasm")
+    os.environ["PY2WASM_OUTPUT"] = final_output_file
+
+    main()
 
 if __name__ == "__main__":
     if "NUITKA_PACKAGE_HOME" in os.environ:
