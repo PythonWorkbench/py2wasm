@@ -85,6 +85,8 @@ def addDataFiles(data_files, base_path, do_byte_compile=True):
         "%s/LICENSE*" % base_path,
         "%s/*/LICENSE*" % base_path,
         "%s/READ*" % base_path,
+        "%s/wasi-python/*" % base_path,
+        "%s/wasi-python/*/*" % base_path,
     )
 
     data_files.extend(patterns)

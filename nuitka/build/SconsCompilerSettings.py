@@ -422,6 +422,10 @@ def decideConstantsBlobResourceMode(env, module_mode):
     elif isPosixWindows():
         resource_mode = "linker"
         reason = "default MSYS2 Posix"
+    elif True:
+        # For WASI
+        resource_mode = "code"
+        reason = "default for WASI"
     elif isMacOS():
         resource_mode = "mac_section"
         reason = "default for macOS"
@@ -635,8 +639,41 @@ def setupCCompiler(env, lto_mode, pgo_mode, job_count, onefile_compile):
         if env.debug_mode:
             env.Append(CCFLAGS=["-Wunused-but-set-variable"])
 
+
+    if True:
+        # For WASI
+        target_flag = "--target=wasm32-wasi"
+        env.Append(CCFLAGS=[target_flag])
+        env.Append(LINKFLAGS=[target_flag])
+        # env.Append(CCFLAGS=["-D_NUITKA_EXPERIMENTAL_DEBUG_CONSTANTS=1"])
+
+        env.Append(CCFLAGS=["-D_WASI_EMULATED_MMAN"])
+        env.Append(LINKFLAGS=["-lwasi-emulated-mman"])
+
+        # getpid
+        env.Append(CCFLAGS=["-D_WASI_EMULATED_GETPID"])
+        env.Append(LINKFLAGS=["-lwasi-emulated-getpid"])
+
+        # signal
+        env.Append(CCFLAGS=["-D_WASI_EMULATED_SIGNAL"])
+        env.Append(LINKFLAGS=["-lwasi-emulated-signal"])
+
+        # process-clocks
+        env.Append(CCFLAGS=["-D_WASI_EMULATED_PROCESS_CLOCKS"])
+        env.Append(LINKFLAGS=["-lwasi-emulated-process-clocks"])
+
+        # dlopen / dlsym
+        env.Append(LINKFLAGS=["-ldl"])
+
+        # mpdec
+        # /Users/syrusakbary/Development/cpython-3.11/builddir/wasi/Modules/_decimal/libmpdec/
+        env.Append(LINKFLAGS=["-lmpdec"])
+
+        # expat
+        # /Users/syrusakbary/Development/cpython-3.11/builddir/wasi/Modules/expat/
+        env.Append(LINKFLAGS=["-lexpat"])
     # Support for macOS standalone to run on older OS versions.
-    if isMacOS():
+    elif isMacOS():
         setEnvironmentVariable(env, "MACOSX_DEPLOYMENT_TARGET", env.macos_min_version)
 
         target_flag = "--target=%s-macos%s" % (

@@ -54,3 +54,6 @@ recursive-include nuitka/code_generation/templates_c *.j2
 
 # Report templates
 recursive-include nuitka/reports *.j2
+
+# Python WASI
+recursive-include wasi-python
