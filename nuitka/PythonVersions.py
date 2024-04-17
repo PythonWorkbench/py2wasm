@@ -21,6 +21,22 @@ def getSupportedPythonVersions():
     """Officially supported Python versions for Nuitka."""
 
     return (
+        # "2.6",
+        # "2.7",
+        # "3.4",
+        # "3.5",
+        # "3.6",
+        # "3.7",
+        # "3.8",
+        # "3.9",
+        # "3.10",
+        "3.11",
+    )
+
+
+def getNotYetSupportedPythonVersions():
+    """Versions known to not work at all (yet)."""
+    return (
         "2.6",
         "2.7",
         "3.4",
@@ -30,13 +46,9 @@ def getSupportedPythonVersions():
         "3.8",
         "3.9",
         "3.10",
-        "3.11",
+        # "3.11",
+        "3.12",
     )
-
-
-def getNotYetSupportedPythonVersions():
-    """Versions known to not work at all (yet)."""
-    return ("3.12",)
 
 
 def getPartiallySupportedPythonVersions():
@@ -273,7 +285,7 @@ def getSystemPrefixPath():
     if _the_sys_prefix is None:
         if True:
             # WASI-Python
-            wasi_python_dir = os.path.join(os.path.dirname(__file__), "wasi-python")
+            wasi_python_dir = os.path.join(os.path.dirname(__file__), "../wasi-python")
             _the_sys_prefix = wasi_python_dir
             return _the_sys_prefix
 

@@ -406,16 +406,16 @@ setup(
         # Nuitka standalone mode aims at distribution
         "Topic :: System :: Software Distribution",
         # Python2 supported versions.
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
+        # "Programming Language :: Python :: 2.6",
+        # "Programming Language :: Python :: 2.7",
         # Python3 supported versions.
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
+        # "Programming Language :: Python :: 3.4",
+        # "Programming Language :: Python :: 3.5",
+        # "Programming Language :: Python :: 3.6",
+        # "Programming Language :: Python :: 3.7",
+        # "Programming Language :: Python :: 3.8",
+        # "Programming Language :: Python :: 3.9",
+        # "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         # We depend on CPython.
         "Programming Language :: Python :: Implementation :: CPython",
