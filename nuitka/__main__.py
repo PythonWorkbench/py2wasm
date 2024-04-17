@@ -149,6 +149,47 @@ def main():
     if Options.isShowMemory():
         MemoryUsage.showMemoryTrace()
 
+def py2wasm():
+    WASI_SDK_DIR = os.environ.get("WASI_SDK_DIR")
+    if not WASI_SDK_DIR:
+        print("Please set the WASI_SDK_DIR to continue")
+        return -1
+    clang_path = "%s/bin/clang" % WASI_SDK_DIR
+    if not os.path.isfile(clang_path):
+        print("The SDK clang file doesn't exist: %s" % clang_path)
+        return -1
+    os.environ["CC"] = clang_path
+
+    import argparse
+
+    parser = argparse.ArgumentParser(description='py2wasm is a program to compile Python to WebAssembly', prog="py2wasm")
+    parser.add_argument('filename', help='The python file to compile')
+    parser.add_argument('-o', '--output', help='The output wasm')
+    args = parser.parse_args(sys.argv[1:])
+
+    extra_args = []
+    if args.output:
+        output_dir = os.path.dirname(args.output) or "py2wasm"
+        output_filename = os.path.basename(args.output)
+        extra_args = [
+            "-output-dir=%s" % output_dir,
+            "--output-filename=%s" % output_filename,
+            "--remove-output"
+        ]
+
+    binary_name = "nuitka"
+    if "NUITKA_BINARY_NAME" in os.environ:
+        binary_name = os.environ["NUITKA_BINARY_NAME"]
+
+    sys.argv = [
+        binary_name,
+        args.filename,
+        "--standalone",
+        "--static-libpython=yes",
+        "--disable-ccache",
+    ] + extra_args
+
+    main()
 
 if __name__ == "__main__":
     if "NUITKA_PACKAGE_HOME" in os.environ:

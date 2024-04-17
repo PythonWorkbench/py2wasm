@@ -332,6 +332,7 @@ if os.name == "nt" and not isMSYS2MingwPython():
     console_scripts = []
 else:
     console_scripts = [
+        "py2wasm = nuitka.__main__:py2wasm",
         "nuitka%s = nuitka.__main__:main" % binary_suffix,
         "nuitka%s-run = nuitka.__main__:main" % binary_suffix,
     ]
@@ -386,7 +387,7 @@ if sys.platform == "darwin" and sys.version_info < (3, 7):
     install_requires.append("orderedset >= 2.0.3")
 
 setup(
-    name="Nuitka",
+    name="py2wasm",
     license="Apache License, Version 2.0",
     version=version,
     long_description=long_description,
