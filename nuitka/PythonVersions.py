@@ -285,7 +285,7 @@ def getSystemPrefixPath():
     if _the_sys_prefix is None:
         if True:
             # WASI-Python
-            wasi_python_dir = os.path.join(os.path.dirname(__file__), "../wasi-python")
+            wasi_python_dir = os.path.join(os.path.dirname(__file__), "wasi-python")
             _the_sys_prefix = wasi_python_dir
             return _the_sys_prefix
 

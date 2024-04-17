@@ -14,7 +14,6 @@ or package, that can contain all used modules too.
 import os
 import sys
 
-
 def main():
     # PyLint for Python3 thinks we import from ourselves if we really
     # import from package, pylint: disable=I0021,no-name-in-module
@@ -150,11 +149,14 @@ def main():
         MemoryUsage.showMemoryTrace()
 
 def py2wasm():
-    WASI_SDK_DIR = os.environ.get("WASI_SDK_DIR")
-    if not WASI_SDK_DIR:
-        print("Please set the WASI_SDK_DIR to continue")
-        return -1
-    clang_path = "%s/bin/clang" % WASI_SDK_DIR
+    from nuitka.utils.wasi_sdk import try_get_sdk_path
+
+    sdk_path = try_get_sdk_path()
+    # WASI_SDK_DIR = os.environ.get("WASI_SDK_DIR")
+    # if not WASI_SDK_DIR:
+    #     print("Please set the WASI_SDK_DIR to continue")
+    #     return -1
+    clang_path = "%s/bin/clang" % sdk_path
     if not os.path.isfile(clang_path):
         print("The SDK clang file doesn't exist: %s" % clang_path)
         return -1
