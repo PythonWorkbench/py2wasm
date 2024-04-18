@@ -398,6 +398,7 @@ setup(
     version=version,
     long_description=long_description,
     long_description_content_type="text/x-rst",
+    python_requires='>=3.11,<3.12',
     classifiers=[
         # Nuitka is mature even
         "Development Status :: 5 - Production/Stable",
