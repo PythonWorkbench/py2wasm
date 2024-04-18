@@ -158,7 +158,7 @@ def py2wasm():
     #     return -1
     clang_path = "%s/bin/clang" % sdk_path
     if not os.path.isfile(clang_path):
-        print("The SDK clang file doesn't exist: %s" % clang_path)
+        print("py2wasm: The SDK clang file doesn't exist: %s" % clang_path)
         return -1
     os.environ["CC"] = clang_path
 
@@ -170,14 +170,14 @@ def py2wasm():
     args = parser.parse_args(sys.argv[1:])
 
     extra_args = []
-    if args.output:
-        output_dir = os.path.dirname(args.output) or "py2wasm"
-        output_filename = os.path.basename(args.output)
-        extra_args = [
-            "-output-dir=%s" % output_dir,
-            "--output-filename=%s" % output_filename,
-            "--remove-output"
-        ]
+
+    output_dir = os.path.join(os.path.dirname(__file__), "__py2wasm")
+    output_filename = "output.wasm"
+    extra_args = [
+        "--output-dir=%s" % output_dir,
+        "--output-filename=%s" % output_filename,
+        "--remove-output"
+    ]
 
     binary_name = "nuitka"
     if "NUITKA_BINARY_NAME" in os.environ:
@@ -189,7 +189,12 @@ def py2wasm():
         "--standalone",
         "--static-libpython=yes",
         "--disable-ccache",
+        # "--onefile",
+        "--lto=yes",
     ] + extra_args
+
+    final_output_file = args.output or args.filename.replace(".py", ".wasm")
+    os.environ["PY2WASM_OUTPUT"] = final_output_file
 
     main()
 
