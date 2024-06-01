@@ -195,8 +195,8 @@ def _buildMatchSequence(provider, pattern, make_against, source_ref):
                 assert "!" not in variable_name, variable_name
 
                 # Last one
-                if star_pos == len(pattern.patterns):
-                    slice_value = slice(count)
+                if star_pos == len(pattern.patterns) - 1:
+                    slice_value = slice(star_pos, None)
                 else:
                     slice_value = slice(count, -(len(pattern.patterns) - (count + 1)))
 
