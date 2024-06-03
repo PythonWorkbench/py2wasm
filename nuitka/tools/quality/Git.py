@@ -79,11 +79,17 @@ def getModifiedPaths():
 
     output = check_output(["git", "diff", "--name-only"])
 
+    my_print("Modified un-staged:")
+    my_print(output)
+
     for line in output.splitlines():
         if str is not bytes:
             line = line.decode("utf8")
 
         result.add(line)
+
+    my_print("Modified cached:")
+    my_print(output)
 
     output = check_output(["git", "diff", "--cached", "--name-only"])
 
@@ -93,7 +99,12 @@ def getModifiedPaths():
 
         result.add(line)
 
-    return tuple(sorted(filename for filename in result if os.path.exists(filename)))
+    result = tuple(sorted(filename for filename in result if os.path.exists(filename)))
+
+    my_print("Modified result:")
+    my_print(result)
+
+    return result
 
 
 def getRemoteURL(remote_name):
